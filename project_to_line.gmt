@@ -1,0 +1,20 @@
+filename="I2nd.nc"
+tempfile="tempfile.xyz"
+output="projection.txt"
+range="-125/-121/37.0/42.2"
+center="-123/40"
+length="-150/150"
+width="-10/10"
+projection="M3.7i"
+out_strain="spline_projection.ps"
+out_strain_pdf="spline_projection.pdf"
+
+rm $out_strain_pdf
+
+gmt grd2xyz $filename > $tempfile
+gmt project $tempfile -C$center -L$length -W$width -Fzrs > $output
+
+gmt psbasemap -R0/300/0/1000 -JX3i/1i -K > $out_strain
+awk '{print $2, $3, $1}' $output | gmt psxy -R0/300/0/1000 -JX3i/1i -Sc0.01i -W0.5p -G0/0/200 -K -O >> $out_strain
+
+gmt psconvert $out_strain -Tf
