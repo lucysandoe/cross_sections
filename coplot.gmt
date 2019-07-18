@@ -51,4 +51,12 @@ gmt psxy $output1 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,blue -Gblue -K -O 
 gmt psxy $output2 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,red -Gred -K -O >> $out_ps
 gmt psxy $output3 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,green -Ggreen -K -O >> $out_ps
 
+rm $output1
+rm $output2
+rm $output3
+rm $tempfile1
+rm $tempfile2
+rm $tempfile3
+rm gmt.history
+
 gmt psconvert $out_ps -Tf
