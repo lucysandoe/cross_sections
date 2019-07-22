@@ -74,7 +74,7 @@ def output(xdata, ydata, vals, outdir, indexfile, outfile):
 	# netcdf_functions.flip_if_necessary(outdir+outfile);
 	return
 
-myfile, myvals = input("../2D_Strain/Results/Results_Delaunay/I2nd.txt")
+myfile, myvals = input("../2D_Strain/Results/Results_Delaunay/max_shear.txt")
 mygrid, mylons, mylats = make_grid(-125, -121, 39, 42.2, 0.05)
 mytri = make_triangles(myfile)
 mygridvals = find_in_triangles(mytri, myvals, mygrid)
@@ -83,7 +83,7 @@ print(len(mynewvals))
 print(len(mylats))
 
 myx, myy = seperate_coords(mygrid)
-output(mylons, mylats, mynewvals, '../2D_Strain/Results/Results_Delaunay/', 'index_file.txt','I2nd.nc')
+output(mylons, mylats, mynewvals, '../2D_Strain/Results/Results_Delaunay/', 'max_shear_index_file.txt','max_shear.nc')
 
 
 # plt.plot(myx,myy,'.')
