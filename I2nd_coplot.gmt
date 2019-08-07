@@ -1,16 +1,16 @@
 file1="../2D_Strain/Results/Results_Delaunay/I2nd.nc"
 file2="../2D_Strain/Results/Results_Numpy_Spline/I2nd.nc"
-file3="../2D_Strain/Results/Results_Visr/I2nd.nc"
-file4="../2D_Strain/Results/Results_ND_interp/I2nd.nc"
+file3="../2D_Strain/Results/Results_ND_interp/I2nd.nc"
+file4="../2D_Strain/Results/Results_Visr/I2nd.nc"
 file5="../2D_Strain/Results/Results_Tape/I2nd.nc"
-# file6="../2D_Strain/Results/Results_means/means.nc"
+file6="../2D_Strain/Results/Results_means/means.nc"
 tempfile="tempfile.xyz"
 output1="projection1.txt"
 output2="projection2.txt"
 output3="projection3.txt"
 output4="projection4.txt"
 output5="projection5.txt"
-# output6="means.txt"
+output6="means.txt"
 range="-125/-121/39.0/42.2"
 cx=-122.5
 cy=40
@@ -51,9 +51,8 @@ gmt grd2xyz $file5 > $tempfile
 gmt project $tempfile -C$cx/$cy -L$l_min/$l_max -A$azimuth -W$w_min/$w_max -Q -Fpz > $output5
 rm $tempfile
 
-# gmt grd2xyz $file6 > $tempfile
-# gmt project $tempfile -C$cx/$cy -L$l_min/$l_max -A$azimuth -W$w_min/$w_max -Q -Fpz > $output6
-# rm $tempfile
+gmt grd2xyz $file6 > $tempfile
+gmt project $tempfile -C$cx/$cy -L$l_min/$l_max -A$azimuth -W$w_min/$w_max -Q -Fpz > $output6
 
 # plotting california
 gmt psbasemap -R$range -J$projection -Y6 -BWESN+t"Cross-Section Location" -Bp1.0 -K > $out_ps
@@ -66,20 +65,37 @@ EOF
 
 # # plotting profiles of strain
 gmt psbasemap -R$plot_range -JX$plot_size -Y3 -X13 -Bf10a50:"Km":/f.5a1:"I2nd (log10)":wEsN -K -O >> $out_ps
-gmt psxy $output1 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,blue -Gblue -K -O >> $out_ps
-gmt psxy $output2 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,red -Gred -K -O >> $out_ps
-gmt psxy $output3 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,green -Ggreen -K -O >> $out_ps
-gmt psxy $output4 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,yellow -Gyellow -K -O >> $out_ps
-gmt psxy $output5 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,pink -Gpink -K -O >> $out_ps
+gmt psxy $output1 -R$plot_range -JX$plot_size -Sc0.04i -W0.1p,red3 -Gred3 -K -O >> $out_ps
+gmt psxy $output2 -R$plot_range -JX$plot_size -Sc0.04i -W0.1p,indianred1 -Gindianred1 -K -O >> $out_ps
+gmt psxy $output3 -R$plot_range -JX$plot_size -Sc0.04i -W0.1p,goldenrod1 -Ggoldenrod1 -K -O >> $out_ps
+gmt psxy $output4 -R$plot_range -JX$plot_size -Sc0.04i -W0.1p,limegreen -Glimegreen -K -O >> $out_ps
+gmt psxy $output5 -R$plot_range -JX$plot_size -Sc0.04i -W0.1p,royalblue -Groyalblue -K -O >> $out_ps
+# adding lines to graph
+# sort -r -k1,1 -n $output1 | gmt psxy -R$plot_range -JX$plot_size -W0.1p,red3 -K -O >> $out_ps
+# sort -r -k1,1 -n $output2 | gmt psxy -R$plot_range -JX$plot_size -W0.1p,indianred1 -K -O >> $out_ps
+# sort -r -k1,1 -n $output3 | gmt psxy -R$plot_range -JX$plot_size -W0.1p,goldenrod1 -K -O >> $out_ps
+# sort -r -k1,1 -n $output4 | gmt psxy -R$plot_range -JX$plot_size -W0.1p,limegreen -K -O >> $out_ps
+# sort -r -k1,1 -n $output5 | gmt psxy -R$plot_range -JX$plot_size -W0.1p,royalblue -K -O >> $out_ps
 # # plotting means
-# gmt psxy $output6 -R$plot_range -JX$plot_size -Sc0.02i -W0.1p,black -Gblack -K -O >> $out_ps
+sort -r -k1,1 -n $output6 | gmt psxy -R$plot_range -JX$plot_size -W0.9p,black -K -O >> $out_ps
+
+gmt pslegend -F+gazure1+pblack -Dx0.i/-1.6i+w2.1i/1.4i+jBL+l1.2 -O -K <<EOF>> $out_ps
+G 0.05i
+N 1
+S 0.1i c 0.1i red3 0.25p 0.3i Delaunay
+S 0.1i c 0.1i indianred1 0.25p 0.3i Numpy Spline
+S 0.1i c 0.1i goldenrod1 0.25p 0.3i Numpy ND Interpolator
+S 0.1i c 0.1i limegreen 0.25p 0.3i VISR
+S 0.1i c 0.1i royalblue 0.25p 0.3i Tape/Wavelets
+S 0.1i - 0.1i 0.25i black 0.3i Mean Value
+EOF
 
 rm $output1
 rm $output2
 rm $output3
 rm $output4
 rm $output5
-# rm $output6
+rm $output6
 rm gmt.history
 
 gmt psconvert $out_ps -Tf
