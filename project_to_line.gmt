@@ -1,3 +1,5 @@
+#!/bin/bash
+
 filename="I2nd.nc"
 tempfile="tempfile.xyz"
 output="projection.txt"
